@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  light_object_id: 1
+  state: 1
+  label: MyString
+  expiry: 2015-09-19 15:54:12
+
+two:
+  user_id: 1
+  light_object_id: 1
+  state: 1
+  label: MyString
+  expiry: 2015-09-19 15:54:12

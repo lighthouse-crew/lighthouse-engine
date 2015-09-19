@@ -1,0 +1,2 @@
+module LightGroupHelper
+end

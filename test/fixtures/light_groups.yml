@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  owner_id: 1
+  name: MyString
+  description: MyText
+  individual: false
+  listed: false
+
+two:
+  owner_id: 1
+  name: MyString
+  description: MyText
+  individual: false
+  listed: false

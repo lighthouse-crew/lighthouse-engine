@@ -3,6 +3,8 @@ require 'securerandom'
 
 class User < ActiveRecord::Base
   has_many :tokens
+  has_many :lights
+  has_many :light_groups, through: :lights
 
   validates :name, presence: true
   validates :username, presence: true, length: { maximum: 20 }, uniqueness: { case_sensitive: false }
