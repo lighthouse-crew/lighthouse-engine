@@ -19,6 +19,7 @@ class LightGroupController < ApplicationController
       )
 
     if light_group.errors.empty?
+      light_group.add_user(@current_user)
       render json: {success: true}
     else
       render json: {success: false, :errors => light_group.errors.full_messages}
