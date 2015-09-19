@@ -5,11 +5,21 @@ class LightGroup < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 
+  INACTIVE = 0
+
   def add_user(user)
-    self.lights.create!(
-      user: user,
-      state: 0,
+    if self.lights.find_by(user: user).nil?
+      self.lights.create!(
+        user: user,
+        state: INACTIVE,
       )
+    end
+  end
+
+  def remove_user(user)
+    self.lights.where(user: user).each do |l|
+      l.destroy!
+     end 
   end
 
 end
