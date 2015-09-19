@@ -9,21 +9,37 @@ class UsersController < ApplicationController
     user.password = password
 
     if user.save
-      render json: {:success => true}
+      render json: {success: true}
     else
-      render json: {:success => false, :errors => user.errors.full_messages}
+      render json: {success: false, :errors => user.errors.full_messages}
     end
   end
 
-  def login
+  def signin
     username = params[:username]
     password = params[:password]
 
     user = User.find_by(username: username)
     success = false
     unless user.nil?
-      success = true if user.validate_password(password)
+      if user.validate_password(password)
+        success = true
+        user.create_token
+      end
     end
-    render json: {:success => success}
+    if success
+      render json: {success: true, token: user.active_token.value}
+    else
+      render json: {success: false}
+    end
+  end
+
+  def signout
+    username = params[:username]
+    user = User.find_by(username: username)
+    unless user.nil?
+      user.active_token.deactivate!
+    end
+    render json: {success: !user.nil?}
   end
 end

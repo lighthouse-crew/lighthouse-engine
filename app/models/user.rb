@@ -1,6 +1,8 @@
 require 'password_helper'
+require 'securerandom'
 
 class User < ActiveRecord::Base
+  has_many :tokens
 
   validates :name, presence: true
   validates :username, presence: true, length: { maximum: 20 }, uniqueness: { case_sensitive: false }
@@ -22,6 +24,19 @@ class User < ActiveRecord::Base
 
   def validate_password(password)
     validatePassword(password, self.hashed_password)
+  end
+
+  def create_token
+    self.tokens.where(active: true).each(&:deactivate!)
+
+    self.tokens.create!(
+      value: SecureRandom.base64(32), 
+      active: true
+    )
+  end
+
+  def active_token
+    self.tokens.find_by(active: true)
   end
 
   def unhashed_password_cannot_be_empty

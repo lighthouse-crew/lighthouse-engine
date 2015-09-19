@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   # root 'welcome#index'
 
   post 'users/signup' => 'users#signup'
-  post 'users/login' => 'users#login'
+  post 'users/signin' => 'users#signin'
+  post 'users/signout' => 'users#signout'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
