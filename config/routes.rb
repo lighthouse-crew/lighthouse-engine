@@ -9,6 +9,13 @@ Rails.application.routes.draw do
   post 'users/signin' => 'users#signin'
   post 'users/signout' => 'users#signout'
 
+  resources :light_group, only: [:index, :create, :show, :update, :destroy] do
+    member do
+      post 'join' => 'light_group#join'
+      post 'leave' => 'light_group#leave'
+    end
+  end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
