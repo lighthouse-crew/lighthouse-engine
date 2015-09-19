@@ -9,10 +9,16 @@ Rails.application.routes.draw do
   post 'users/signin' => 'users#signin'
   post 'users/signout' => 'users#signout'
 
-  resources :light_group, only: [:index, :create, :show, :update, :destroy] do
+  resources :light_groups, only: [:index, :create, :show, :update, :destroy] do
     member do
-      post 'join' => 'light_group#join'
-      post 'leave' => 'light_group#leave'
+      post 'join' => 'light_groups#join'
+      post 'leave' => 'light_groups#leave'
+    end
+  end
+
+  resources :users, only: [] do
+    member do
+      resources :light_groups, only: [:index]
     end
   end
 

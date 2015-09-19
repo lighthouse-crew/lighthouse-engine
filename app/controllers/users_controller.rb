@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     if user.save
       render json: {success: true}
     else
-      render json: {success: false, :errors => user.errors.full_messages}
+      render json: {success: false, errors: user.errors.full_messages}
     end
   end
 

@@ -3,6 +3,7 @@ class LightGroup < ActiveRecord::Base
   has_many :users, through: :lights
   belongs_to :owner, class_name: 'User'
 
+  before_save :assign_defaults
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 
   INACTIVE = 0
@@ -21,5 +22,17 @@ class LightGroup < ActiveRecord::Base
       l.destroy!
      end 
   end
+
+  def has_user(user)
+    return !self.lights.find_by(user: user).nil?
+  end
+
+  private
+
+    def assign_defaults
+      self.description = "" if self.description.nil?
+      self.individual = false if self.individual.nil?
+      self.listed = true if self.listed.nil?
+    end
 
 end

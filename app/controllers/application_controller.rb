@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   def ensure_token_valid
     token = Token.find_by(value: params['token'])
     if token.nil?
-        render json: {error: "Token invalid"}
+        render json: {success: false, error: "Token invalid"}
     else token.nil?
         @current_user = token.user
     end
