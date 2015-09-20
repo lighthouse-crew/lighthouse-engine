@@ -112,13 +112,13 @@ class LightGroupsController < ApplicationController
   end 
 
   def update_light
-    new_state = params[:state]
+    new_state = params[:state].to_i
     new_label = params[:label]
     light = @light_group.lights.find_by(user: @current_user)
     if light.nil?
       render json: {success: false, error: ["User is not in this light group"]}
     else
-      light.state = new_state.to_i
+      light.state = new_state
       if new_state == 1
         light.label = new_label
       elsif new_state == 0
@@ -126,8 +126,8 @@ class LightGroupsController < ApplicationController
       end
       if light.save
         push_tokens = @light_group.users.map(&:device_token)
-        alert_text = "test notification"
-        send_notifications(push_tokens, alert_text)
+        alert_text = "Lighthouse: #{@current_user.name} is #{LightGroup::STATE_STRING[new_state]} in #{@light_group.name}"
+        send_sms_notifications(push_tokens, alert_text)
         render json: {
           success: true,
           light_group_id: light.light_group_id,
@@ -137,7 +137,7 @@ class LightGroupsController < ApplicationController
           expires_at: light.expires_at
         }
       else
-        render json: {success: false, error: light.errors.full_messages}
+        render json: {success: false, error: light.errors.full_messages.join("\n")}
       end
     end
   end

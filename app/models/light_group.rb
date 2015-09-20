@@ -9,6 +9,7 @@ class LightGroup < ActiveRecord::Base
   INACTIVE = 0
   ACTIVE = 1
   IN_PROGRESS = 2
+  STATE_STRING = ['inactive', 'active', 'in progress']
 
   def add_user(user)
     if self.lights.find_by(user: user).nil?
