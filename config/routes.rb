@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     member do
       post 'join' => 'light_groups#join'
       post 'leave' => 'light_groups#leave'
+      post 'update_light' => 'light_groups#update_light'
     end
   end
 
