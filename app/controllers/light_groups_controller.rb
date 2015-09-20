@@ -56,6 +56,9 @@ class LightGroupsController < ApplicationController
   def show
     # Only show if user is in the group or group is listed
     if @light_group.has_user(@current_user) || @light_group.listed
+      my_light = @light_group.lights.where(user: @current_user)
+      other_lights = @light_group.lights.order(state: :desc).reject {|l| l.user_id == @current_user.id}
+      lights = my_light + other_lights
       render json: {
         success: true,
         id: @light_group.id,
@@ -64,7 +67,7 @@ class LightGroupsController < ApplicationController
         description: @light_group.description,
         individual: @light_group.individual,
         listed: @light_group.listed,
-        members: @light_group.lights.map do |l|
+        members: lights.each do |l|
           {
             user_name: User.find(l.user_id).name,
             state: l.state,
