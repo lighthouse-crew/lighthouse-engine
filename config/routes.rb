@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :users, only: [] do
     member do
       resources :light_groups, only: [:index]
+      post 'submit_token' => 'users#submit_token'
     end
   end
 

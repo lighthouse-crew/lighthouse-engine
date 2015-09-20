@@ -7,6 +7,8 @@ class LightGroup < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 
   INACTIVE = 0
+  ACTIVE = 1
+  IN_PROGRESS = 2
 
   def add_user(user)
     if self.lights.find_by(user: user).nil?

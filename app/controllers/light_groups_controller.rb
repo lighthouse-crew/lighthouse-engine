@@ -1,6 +1,10 @@
+require 'notification_helper'
+
 class LightGroupsController < ApplicationController
   before_action :ensure_token_valid
   around_filter :load_light_group, except: [:create, :index, :find_and_join]
+
+  include NotificationHelper
 
   def index
     light_groups = nil
@@ -121,6 +125,9 @@ class LightGroupsController < ApplicationController
         light.label = ""
       end
       if light.save
+        push_tokens = @light_group.users.map(&:device_token)
+        alert_text = "test notification"
+        send_notifications(push_tokens, alert_text)
         render json: {
           success: true,
           light_group_id: light.light_group_id,
