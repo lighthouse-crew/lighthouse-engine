@@ -42,4 +42,14 @@ class UsersController < ApplicationController
     end
     render json: {success: !user.nil?}
   end
+
+  def submit_token
+    ensure_token_valid
+    @current_user.device_token = params[:device_token]
+    if @current_user.save
+      render json: {success: true}
+    else
+      render json: {success: false, errors: user.errors.full_messages}
+    end
+  end
 end
