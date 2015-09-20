@@ -20,7 +20,8 @@ class LightGroupsController < ApplicationController
           name: g.name,
           description: g.description,
           individual: g.individual,
-          listed: g.listed
+          listed: g.listed,
+          my_state: g.lights.find_by(user: @current_user).state
         }
       end
     }
