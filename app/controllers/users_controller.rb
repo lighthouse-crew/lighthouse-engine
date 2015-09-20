@@ -28,7 +28,7 @@ class UsersController < ApplicationController
       end
     end
     if success
-      render json: {success: true, token: user.active_token.value, uid: user.id}
+      render json: {success: true, token: user.active_token.value, uid: user.id, name: user.name}
     else
       render json: {success: false}
     end
