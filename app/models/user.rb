@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
     self.tokens.where(active: true).each(&:deactivate!)
 
     self.tokens.create!(
-      value: SecureRandom.base64(32), 
+      value: SecureRandom.hex(32), 
       active: true
     )
   end
