@@ -46,6 +46,9 @@ class UsersController < ApplicationController
   def submit_token
     ensure_token_valid
     @current_user.device_token = params[:device_token]
+    if params[:device_token].nil?
+      raise "Device Token nil"
+    end
     if @current_user.save
       render json: {success: true}
     else
