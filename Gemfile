@@ -45,3 +45,4 @@ end
 
 gem 'rails_12factor', group: :production
 gem 'houston'
+gem 'twilio-ruby', '~> 4.2.1'

@@ -55,7 +55,7 @@ class LightGroupsController < ApplicationController
 
   def show
     # Only show if user is in the group or group is listed
-    if @lightgroup.has_user(@current_user) || @lightgroup.listed
+    if @light_group.has_user(@current_user) || @light_group.listed
       render json: {
         success: true,
         id: @light_group.id,
