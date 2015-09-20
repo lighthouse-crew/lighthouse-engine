@@ -15,6 +15,10 @@ Rails.application.routes.draw do
       post 'leave' => 'light_groups#leave'
       post 'update_light' => 'light_groups#update_light'
     end
+
+    collection do
+      post 'find_and_join' => 'light_groups#find_and_join'
+    end
   end
 
   resources :users, only: [] do

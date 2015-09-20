@@ -1,6 +1,6 @@
 class LightGroupsController < ApplicationController
   before_action :ensure_token_valid
-  around_filter :load_light_group, except: [:create, :index]
+  around_filter :load_light_group, except: [:create, :index, :find_and_join]
 
   def index
     light_groups = nil
@@ -90,6 +90,16 @@ class LightGroupsController < ApplicationController
   def join
     @light_group.add_user(@current_user)
     render json: {success: true}
+  end
+
+  def find_and_join
+    @light_group = LightGroup.find_by_name(params[:name])
+    if @light_group.nil?
+      render json: {success: false}
+    else
+      @light_group.add_user(@current_user)
+      render json: {success: true}
+  end
   end
 
   def leave
