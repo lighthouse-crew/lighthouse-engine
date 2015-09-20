@@ -119,15 +119,23 @@ class LightGroupsController < ApplicationController
       render json: {success: false, error: ["User is not in this light group"]}
     else
       light.state = new_state
-      if new_state == 1
-        light.label = new_label
-      elsif new_state == 0
+      success = false
+      case new_state
+      when LightGroup::INACTIVE
         light.label = ""
+        success = light.save
+      when LightGroup::SEARCHING
+        light.label = new_label
+        success = light.save
+        puts light.reload
+      when LightGroup::ACTIVE
+        success = light.save
+        @light_group.lights.where(label: light.label).each do |l|
+          l.state = LightGroup::ACTIVE
+          success = success and l.save
+        end
       end
-      if light.save
-        push_tokens = @light_group.users.map(&:device_token)
-        alert_text = "Lighthouse: #{@current_user.name} is #{LightGroup::STATE_STRING[new_state]} in #{@light_group.name}"
-        send_sms_notifications(push_tokens, alert_text)
+      if success
         render json: {
           success: true,
           light_group_id: light.light_group_id,
@@ -136,6 +144,15 @@ class LightGroupsController < ApplicationController
           label: light.label,
           expires_at: light.expires_at
         }
+        sms_recipients = @light_group.users.reject {|u| u.id==@current_user.id}.map(&:device_token)
+        case new_state
+        when LightGroup::SEARCHING
+          sms_content = "LIGHTHOUSE: #{light.user.name} is now searching in #{light.light_group.name}: #{light.label}"
+          send_sms_notifications(sms_recipients, sms_content)
+        when LightGroup::ACTIVE
+          sms_content = "LIGHTHOUSE: Activity started on #{light.light_group.name}: #{light.label}"
+          send_sms_notifications(sms_recipients, sms_content)
+        end
       else
         render json: {success: false, error: light.errors.full_messages.join("\n")}
       end
